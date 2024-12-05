@@ -73,35 +73,11 @@ WHERE NOT EXISTS (
 
 --6---------Task 6: Implement Constraints
 --------Prevent enrolling students in a course if it has reached its capacity:
-CREATE TRIGGER check_capacity
-BEFORE INSERT ON Enrollments
-FOR EACH ROW
-BEGIN
-    DECLARE current_count INT;
-    SELECT COUNT(*) INTO current_count
-    FROM Enrollments
-    WHERE course_id = NEW.course_id;
-    IF current_count >= (SELECT capacity FROM Courses WHERE course_id = NEW.course_id) THEN
-        SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'Course capacity reached';
-    END IF;
-END;
+
 
 
 -----------Ensure each student can enroll in a maximum of 5 courses:
-CREATE TRIGGER check_student_courses
-BEFORE INSERT ON Enrollments
-FOR EACH ROW
-BEGIN
-    DECLARE course_count INT;
-    SELECT COUNT(*) INTO course_count
-    FROM Enrollments
-    WHERE student_id = NEW.student_id;
-    IF course_count >= 5 THEN
-        SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'Student cannot enroll in more than 5 courses';
-    END IF;
-END;
+
 
 
 --7----------Task 7: Clean and Reset Data
